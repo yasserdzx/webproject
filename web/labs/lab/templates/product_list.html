@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Product List{% endblock %}
+
+{% block content %}
+    <h2>Product List</h2>
+    <a href="{% url 'product_add' %}">Add New Product</a>
+    <ul>
+        {% for product in products %}
+            <li>{{ product.name }} - <a href="{% url 'product_edit' product.pk %}">Edit</a> - <a href="{% url 'product_delete' product.pk %}">Delete</a></li>
+        {% endfor %}
+    </ul>
+
+    {% if products.has_other_pages %}
+    <ul class="pagination">
+        {% if products.has_previous %}
+            <li><a href="?page=1">First</a></li>
+            <li><a href="?page={{ products.previous_page_number }}">Previous</a></li>
+        {% endif %}
+        {% for i in products.paginator.page_range %}
+            <li {% if products.number == i %}class="active"{% endif %}><a href="?page={{ i }}">{{ i }}</a></li>
+        {% endfor %}
+        {% if products.has_next %}
+            <li><a href="?page={{ products.next_page_number }}">Next</a></li>
+            <li><a href="?page={{ products.paginator.num_pages }}">Last</a></li>
+        {% endif %}
+    </ul>
+    {% endif %}
+{% endblock %}
